@@ -58,11 +58,15 @@
       gap: 20px;
     }
 
-    /* Size the vertical Short by available height so the CTA below stays
-       on-screen on a portrait phone. Width follows from the 9:16 ratio,
-       capped at 92vw so it never overflows on narrow devices. */
+    /* Size the vertical Short to fill all available height after reserving
+       room for the CTA + contact line below, so the video is as large as
+       possible on a portrait phone. Width follows from the 9:16 ratio,
+       capped at 92vw so it never overflows on narrow devices. The reserved
+       height (--ui-reserve) accounts for the body padding, container gap,
+       CTA, actions gap and contact line. */
     .video-wrapper {
-      width: min(92vw, calc(64vh * 9 / 16));
+      --ui-reserve: 152px;
+      width: min(92vw, calc((100dvh - var(--ui-reserve)) * 9 / 16));
       aspect-ratio: 9 / 16;
       border-radius: 14px;
       overflow: hidden;
@@ -124,7 +128,7 @@
   <main class="container">
     <div class="video-wrapper">
       <iframe
-        src="https://www.youtube-nocookie.com/embed/yGAJxfBpPvQ"
+        src="https://www.youtube-nocookie.com/embed/yGAJxfBpPvQ?playsinline=1"
         title="What is Jomo?"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin"
