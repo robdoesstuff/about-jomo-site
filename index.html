@@ -18,6 +18,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
+  <!-- PostHog analytics -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_kiG8YiWokGPNrffPJPmMjFCBm9dMqaXgsupU9dpLxfnK', {
+      api_host: 'https://e.thejomoapp.com',
+      ui_host: 'https://us.posthog.com',
+      person_profiles: 'identified_only'
+    });
+  </script>
+
   <style>
     :root {
       --bg: #2A2520;
@@ -128,7 +138,8 @@
   <main class="container">
     <div class="video-wrapper">
       <iframe
-        src="https://www.youtube-nocookie.com/embed/yGAJxfBpPvQ?playsinline=1"
+        id="jomo-video"
+        src="https://www.youtube-nocookie.com/embed/yGAJxfBpPvQ?playsinline=1&enablejsapi=1"
         title="What is Jomo?"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin"
@@ -136,11 +147,50 @@
     </div>
 
     <div class="actions">
-      <a class="cta" href="https://thejomoapp.com">Try Jomo — Get Started</a>
+      <a class="cta" id="cta" href="https://thejomoapp.com">Try Jomo — Get Started</a>
       <p class="contact">
         Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a>
       </p>
     </div>
   </main>
+
+  <!-- Event tracking: video engagement + CTA conversion -->
+  <script>
+    // Conversion: click on the primary CTA ("Try Jomo"). Capture before the
+    // browser navigates away; PostHog uses keepalive/sendBeacon so the event
+    // still reaches the server.
+    (function () {
+      var cta = document.getElementById('cta');
+      if (cta) {
+        cta.addEventListener('click', function () {
+          posthog.capture('cta_click', { destination: cta.href });
+        });
+      }
+    })();
+
+    // Video engagement: use the YouTube IFrame Player API so we capture real
+    // play/finish events rather than guessing at clicks inside the iframe.
+    (function () {
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    })();
+
+    var jomoPlayCaptured = false;
+    function onYouTubeIframeAPIReady() {
+      new YT.Player('jomo-video', {
+        events: {
+          onStateChange: function (event) {
+            if (event.data === YT.PlayerState.PLAYING && !jomoPlayCaptured) {
+              jomoPlayCaptured = true;
+              posthog.capture('video_play');
+            } else if (event.data === YT.PlayerState.ENDED) {
+              posthog.capture('video_complete');
+            }
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
