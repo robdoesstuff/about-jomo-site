@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jomo — Bring your customers back</title>
+  <meta name="description" content="Jomo helps businesses bring customers back with AI-powered, targeted offers. Watch a quick intro and try the app." />
+
+  <!-- Open Graph (for link previews when the QR/URL is shared) -->
+  <meta property="og:title" content="Jomo — Bring your customers back" />
+  <meta property="og:description" content="AI-powered customer reactivation. Watch a quick intro and try the app." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://about.thejomoapp.com" />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #2A2520;
+      --surface: #332D28;
+      --border: #4A433D;
+      --text: #F0EAE0;
+      --text-muted: #A09888;
+      --accent: #E8783A;
+      --accent-hover: #D56A2F;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    /* Size the vertical Short by available height so the CTA below stays
+       on-screen on a portrait phone. Width follows from the 9:16 ratio,
+       capped at 92vw so it never overflows on narrow devices. */
+    .video-wrapper {
+      width: min(92vw, calc(64vh * 9 / 16));
+      aspect-ratio: 9 / 16;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .video-wrapper iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 360px;
+      background: var(--accent);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 12px;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+      box-shadow: 0 6px 20px rgba(232, 120, 58, 0.3);
+    }
+
+    .cta:hover { background: var(--accent-hover); }
+    .cta:active { transform: translateY(1px); }
+
+    .contact {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .contact a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/yGAJxfBpPvQ"
+        title="What is Jomo?"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+
+    <div class="actions">
+      <a class="cta" href="https://thejomoapp.com">Try Jomo — Get Started</a>
+      <p class="contact">
+        Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a>
+      </p>
+    </div>
+  </main>
+</body>
+</html>
