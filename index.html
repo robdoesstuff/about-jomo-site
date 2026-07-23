@@ -34,7 +34,7 @@
       --surface: #332D28;
       --border: #4A433D;
       --text: #F0EAE0;
-      --text-muted: #A09888;
+      --text-muted: #AAA292;
       --accent: #E8783A;
       --accent-hover: #D56A2F;
       /* Dark text used on the orange CTA so it meets WCAG AA contrast
@@ -107,7 +107,7 @@
        height (--ui-reserve) accounts for the body padding, container gap,
        CTA, actions gap and contact line. */
     .video-wrapper {
-      --ui-reserve: 152px;
+      --ui-reserve: 194px;
       width: min(92vw, calc((100dvh - var(--ui-reserve)) * 9 / 16));
       aspect-ratio: 9 / 16;
       border-radius: 14px;
@@ -152,6 +152,15 @@
     .cta:hover { background: var(--accent-hover); }
     .cta:active { transform: translateY(1px); }
 
+    .pricing-link {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .pricing-link:hover { text-decoration: none; }
+
     .contact {
       font-size: 15px;
       color: var(--text-muted);
@@ -181,6 +190,7 @@
 
     <div class="actions">
       <a class="cta" id="cta" href="https://thejomoapp.com">Try Jomo — Get Started</a>
+      <a class="pricing-link" href="pricing.html">See pricing &amp; plans</a>
       <p class="contact">
         Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a>
       </p>
