@@ -211,18 +211,58 @@
       }
     })();
 
-    // Video engagement: use the YouTube IFrame Player API so we capture real
-    // play/finish events rather than guessing at clicks inside the iframe.
+    // Video engagement + load instrumentation via the YouTube IFrame Player
+    // API. onReady tells us the player actually initialized and rendered, so
+    // we know the visitor saw a real, clickable video — not a blank/broken
+    // embed. Failures are reported affirmatively (see below) rather than as a
+    // silent absence of the "loaded" event.
     (function () {
       var tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
+      // If the API script itself can't load (blocked/offline), no player will
+      // ever be created — treat that as a load failure.
+      tag.onerror = function () { reportVideoLoadFailure('api_script_error'); };
       document.head.appendChild(tag);
     })();
 
     var jomoPlayCaptured = false;
+    // Set once we know the outcome (loaded or failed) so we report it only once.
+    var jomoLoadResolved = false;
+
+    function isInViewport(el) {
+      if (!el) return false;
+      var r = el.getBoundingClientRect();
+      var vw = window.innerWidth || document.documentElement.clientWidth;
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      return r.width > 0 && r.height > 0 &&
+             r.bottom > 0 && r.right > 0 && r.top < vh && r.left < vw;
+    }
+
+    function reportVideoLoadFailure(reason) {
+      if (jomoLoadResolved) return;
+      jomoLoadResolved = true;
+      posthog.capture('video_load_failed', { reason: reason });
+    }
+
     function onYouTubeIframeAPIReady() {
       new YT.Player('jomo-video', {
         events: {
+          onReady: function () {
+            if (!jomoLoadResolved) {
+              jomoLoadResolved = true;
+              // The player is initialized and displayed; record whether it was
+              // actually within the viewport at that moment.
+              posthog.capture('video_loaded', {
+                in_view: isInViewport(document.getElementById('jomo-video'))
+              });
+            }
+          },
+          onError: function (event) {
+            // Player exists but the video can't be shown (removed, embedding
+            // disabled, invalid id, etc.). Report distinctly from a blank load.
+            jomoLoadResolved = true;
+            posthog.capture('video_error', { code: event.data });
+          },
           onStateChange: function (event) {
             if (event.data === YT.PlayerState.PLAYING && !jomoPlayCaptured) {
               jomoPlayCaptured = true;
@@ -234,6 +274,13 @@
         }
       });
     }
+
+    // Watchdog: if the player hasn't become ready shortly after load (API
+    // blocked, network issue, silent blank embed), report the failure so the
+    // "visitor saw a blank spot" case is visible in analytics.
+    window.addEventListener('load', function () {
+      setTimeout(function () { reportVideoLoadFailure('timeout'); }, 8000);
+    });
   </script>
 </body>
 </html>
