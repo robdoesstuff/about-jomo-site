@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jomo — Bring your customers back</title>
+  <title>Jomo — Get Discovered. Get Remembered. Get Ahead.</title>
 
-  <meta name="description" content="Jomo helps businesses bring customers back with dynamic, targeted offers. Watch a quick intro and try the app." />
+  <meta name="description" content="Jomo is one app for the whole customer lifecycle — help customers find you, remember you, and come back. QR check-in, no app for them to download. Works with Square & Clover. Free up to 50 customers and 500 credits." />
 
   <!-- Open Graph (for link previews when the QR/URL is shared) -->
-  <meta property="og:title" content="Jomo — Bring your customers back" />
-  <meta property="og:description" content="Intelligent customer reactivation. Watch a quick intro and try the app." />
+  <meta property="og:title" content="Jomo — Get Discovered. Get Remembered. Get Ahead." />
+  <meta property="og:description" content="One app for the whole customer lifecycle. QR check-in, no app for customers to download. Free up to 50 customers and 500 credits." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://about.thejomoapp.com" />
 
@@ -32,17 +32,26 @@
     :root {
       --bg: #2A2520;
       --surface: #332D28;
+      --surface-raised: #3B342E;
       --border: #4A433D;
       --text: #F0EAE0;
       --text-muted: #AAA292;
       --accent: #E8783A;
       --accent-hover: #D56A2F;
-      /* Dark text used on the orange CTA so it meets WCAG AA contrast
-         (~5.2:1) — light text on the orange only reached 2.44:1. */
+      /* Dark text used on the orange CTA so it meets WCAG AA contrast. */
       --accent-text: #241F1B;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+    }
 
     /* Visually hidden but available to screen readers. */
     .sr-only {
@@ -57,93 +66,24 @@
       border: 0;
     }
 
-    /* Clear keyboard focus indicator (WCAG 2.4.7). Offset so the ring sits
-       against the dark page background for strong contrast. */
-    a:focus-visible {
+    a:focus-visible,
+    button:focus-visible {
       outline: 3px solid var(--text);
       outline-offset: 3px;
       border-radius: 4px;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        animation: none !important;
-        scroll-behavior: auto !important;
-      }
-    }
-
-    html, body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    body {
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 16px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 20px;
-    }
-
-    /* Size the vertical Short to fill all available height after reserving
-       room for the CTA + contact line below, so the video is as large as
-       possible on a portrait phone. Width follows from the 9:16 ratio,
-       capped at 92vw so it never overflows on narrow devices. The reserved
-       height (--ui-reserve) accounts for the body padding, container gap,
-       CTA, actions gap and contact line. */
-    .video-wrapper {
-      --ui-reserve: 194px;
-      width: min(92vw, calc((100dvh - var(--ui-reserve)) * 9 / 16));
-      aspect-ratio: 9 / 16;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-    }
-
-    .video-wrapper iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-    }
-
+    /* ---------- Shared button ---------- */
     .cta {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      max-width: 360px;
       background: var(--accent);
       color: var(--accent-text);
       font-size: 18px;
       font-weight: 700;
       text-decoration: none;
-      padding: 16px 28px;
+      padding: 15px 32px;
       border-radius: 12px;
       transition: background-color 0.15s ease, transform 0.05s ease;
       box-shadow: 0 6px 20px rgba(232, 120, 58, 0.3);
@@ -152,135 +92,484 @@
     .cta:hover { background: var(--accent-hover); }
     .cta:active { transform: translateY(1px); }
 
-    .pricing-link {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--accent);
-      text-decoration: underline;
+    /* ---------- Hero (Screen 1) ---------- */
+    .hero {
+      min-height: 100dvh;
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* "safe" prevents the content's top from being pushed off-screen (and
+         made unscrollable) when the copy is taller than the viewport. */
+      justify-content: safe center;
+      gap: 32px;
+      text-align: center;
     }
 
-    .pricing-link:hover { text-decoration: none; }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 11px;
+      max-width: 560px;
+    }
 
-    .contact {
+    .brand {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--accent);
+    }
+
+    .hero h1 {
+      font-size: clamp(24px, 5.2vw, 44px);
+      line-height: 1.08;
+      font-weight: 700;
+    }
+
+    .lede-intro {
+      font-size: clamp(15px, 2.4vw, 18px);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .benefits {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .benefit-title {
+      font-size: clamp(18px, 4vw, 22px);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .benefit-desc {
+      position: relative;
+      padding-left: 20px;
+      margin-top: 3px;
       font-size: 15px;
+      line-height: 1.5;
       color: var(--text-muted);
     }
 
-    .contact a {
+    .benefit-desc::before {
+      content: "\2022";
+      position: absolute;
+      left: 4px;
+      top: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .how {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    .how-label { color: var(--text); font-weight: 700; }
+
+    .free-callout { margin-top: 2px; }
+
+    .free-headline {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .free-sub { font-size: 14px; color: var(--text-muted); }
+
+    .hero .cta { width: 100%; max-width: 320px; margin-top: 4px; }
+
+    .compat { font-size: 13px; color: var(--text-muted); }
+
+    .hero-figure {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .hero-figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      display: block;
+    }
+
+    .hero-figure figcaption {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+      max-width: 340px;
+      text-align: center;
+    }
+
+    @media (min-width: 880px) {
+      .hero {
+        flex-direction: row;
+        justify-content: center;
+        gap: 56px;
+        text-align: left;
+      }
+      .hero-content { align-items: flex-start; flex: 1 1 0; max-width: 560px; }
+      .hero-figure { flex: 0 1 440px; }
+      .how { text-align: left; }
+      .hero .cta { width: auto; }
+    }
+
+    /* ---------- Pricing ---------- */
+    .pricing {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 16px 20px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: clamp(24px, 4.6vw, 34px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+
+    .plan {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .plan.popular {
+      border-color: var(--accent);
+      background: var(--surface-raised);
+    }
+
+    .badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .price .amount { font-size: 38px; font-weight: 700; line-height: 1; }
+    .price .period { font-size: 15px; color: var(--text-muted); }
+
+    .credits {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .credits strong { color: var(--text); font-weight: 700; }
+
+    .plan-cta {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 13px 20px;
+      border-radius: 10px;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    .plan-cta:hover { background: var(--accent-hover); }
+    .plan-cta:active { transform: translateY(1px); }
+
+    .included {
+      width: 100%;
+      margin-top: 24px;
+      padding: 26px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .included h2 { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 28px;
+      margin-bottom: 14px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .feature-list li::before {
+      content: "\2713";
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .included-note { font-size: 14px; color: var(--text-muted); }
+
+    .custom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+      margin-top: 24px;
+      padding: 26px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .custom .custom-text h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .custom .custom-text p { font-size: 15px; color: var(--text-muted); }
+
+    .custom .plan-cta {
+      margin-top: 0;
+      width: auto;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      white-space: nowrap;
+    }
+
+    .custom .plan-cta:hover { background: rgba(232, 120, 58, 0.12); }
+
+    .credits-explainer {
+      width: 100%;
+      margin-top: 24px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .credits-explainer h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+
+    .credits-explainer p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .credits-free { margin-top: 14px; color: var(--text); font-weight: 500; }
+
+    .site-footer {
+      margin-top: 34px;
+      font-size: 15px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .site-footer a {
       color: var(--accent);
       text-decoration: underline;
       font-weight: 500;
     }
 
-    .contact a:hover { text-decoration: none; }
+    .site-footer a:hover { text-decoration: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <main class="container">
-    <h1 class="sr-only">Jomo — Bring your customers back</h1>
-    <div class="video-wrapper">
-      <iframe
-        id="jomo-video"
-        src="https://www.youtube-nocookie.com/embed/lEFc3hlylfE?playsinline=1&enablejsapi=1"
-        title="Jomo — the small business booster"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen></iframe>
+  <!-- ===================== SCREEN 1 ===================== -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="sr-only">Jomo — one app to get discovered, remembered, and ahead</h1>
+      <p class="brand">Jomo</p>
+      <p class="lede-intro">One app to:</p>
+      <ul class="benefits">
+        <li class="benefit">
+          <h2 class="benefit-title">Get Discovered</h2>
+          <p class="benefit-desc">easily manage your online presence (what people see when searching online for businesses like yours)</p>
+        </li>
+        <li class="benefit">
+          <h2 class="benefit-title">Get Remembered</h2>
+          <p class="benefit-desc">automatically send customized receipt emails, timely reminders and instant special offers via text message</p>
+        </li>
+        <li class="benefit">
+          <h2 class="benefit-title">Get Ahead</h2>
+          <p class="benefit-desc">effortlessly gather emails and phone numbers from customers using a QR code</p>
+        </li>
+      </ul>
+      <p class="how"><span class="how-label">How it works:</span> You have an app on your phone or computer. Ask it for anything you need help with. It does all the hard work for you. A little sign with a QR code sits on your counter. Customers scan it to check in or sign up — no app for them to download. We send you the materials. It couldn't be easier.</p>
+      <div class="free-callout">
+        <p class="free-headline">Free up to 50 customers and 500 credits.</p>
+        <p class="free-sub">No card. No contract.</p>
+      </div>
+      <a class="cta" id="cta-hero" href="https://thejomoapp.com">Start free</a>
+      <p class="compat">Works with Square &amp; Clover · iOS, Android, and web</p>
     </div>
 
-    <div class="actions">
-      <a class="cta" id="cta" href="https://thejomoapp.com">Try Jomo — Get Started</a>
-      <a class="pricing-link" href="pricing.html">See pricing &amp; plans</a>
-      <p class="contact">
-        Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a>
-      </p>
-    </div>
-  </main>
+    <figure class="hero-figure">
+      <img src="example_jomo_qr_desk.jpg" width="512" height="409"
+        alt="A Jomo QR-code sign on a café counter reading 'Pine & Co. Coffee Roasters — Scan to sign up for special offers,' beside a point-of-sale terminal." />
+      <figcaption>This is all your customers ever touch.</figcaption>
+    </figure>
+  </section>
 
-  <!-- Event tracking: video engagement + CTA conversion -->
+  <!-- ===================== PRICING ===================== -->
+  <section class="pricing" id="pricing">
+    <h2 class="section-title">Simple pricing. Start free.</h2>
+
+    <div class="plans">
+      <div class="plan">
+        <h3 class="plan-name">Starter</h3>
+        <div class="price"><span class="amount">$59</span><span class="period">/ month</span></div>
+        <div class="credits"><strong>2,000</strong> credits / month</div>
+        <a class="plan-cta" data-plan="Starter" data-price="59" href="https://thejomoapp.com" aria-label="Get started with the Starter plan">Get started</a>
+      </div>
+
+      <div class="plan popular">
+        <div class="badge">Most popular</div>
+        <h3 class="plan-name">Growth</h3>
+        <div class="price"><span class="amount">$149</span><span class="period">/ month</span></div>
+        <div class="credits"><strong>5,000</strong> credits / month</div>
+        <a class="plan-cta" data-plan="Growth" data-price="149" href="https://thejomoapp.com" aria-label="Get started with the Growth plan">Get started</a>
+      </div>
+
+      <div class="plan">
+        <h3 class="plan-name">Established</h3>
+        <div class="price"><span class="amount">$279</span><span class="period">/ month</span></div>
+        <div class="credits"><strong>10,000</strong> credits / month</div>
+        <a class="plan-cta" data-plan="Established" data-price="279" href="https://thejomoapp.com" aria-label="Get started with the Established plan">Get started</a>
+      </div>
+
+      <div class="plan">
+        <h3 class="plan-name">High Volume</h3>
+        <div class="price"><span class="amount">$499</span><span class="period">/ month</span></div>
+        <div class="credits"><strong>25,000</strong> credits / month</div>
+        <a class="plan-cta" data-plan="High Volume" data-price="499" href="https://thejomoapp.com" aria-label="Get started with the High Volume plan">Get started</a>
+      </div>
+    </div>
+
+    <section class="included">
+      <h2>Included with every plan</h2>
+      <ul class="feature-list">
+        <li>Full integration</li>
+        <li>POS sync</li>
+        <li>Business helper agent</li>
+      </ul>
+      <p class="included-note">Available with any active subscription.</p>
+    </section>
+
+    <section class="custom">
+      <div class="custom-text">
+        <h2>Need more?</h2>
+        <p>Custom pricing is available for higher volumes and tailored plans.</p>
+      </div>
+      <a class="plan-cta" data-plan="Custom" href="mailto:info@horoco.co?subject=Jomo%20custom%20pricing">Contact us</a>
+    </section>
+
+    <section class="credits-explainer">
+      <h2>How credits work</h2>
+      <p>Credits are what you spend to reach customers. 1 credit per email. 10 credits per text. Your plan includes a monthly pool — send however you like across email and SMS. Credits reset each billing date and don't roll over.</p>
+      <p class="credits-free">Your free account starts with 500 credits and room for 50 customers.</p>
+    </section>
+
+    <footer class="site-footer">
+      <p>Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a></p>
+    </footer>
+  </section>
+
+  <!-- Analytics: CTA conversion + pricing plan selection -->
   <script>
-    // Conversion: click on the primary CTA ("Try Jomo"). Capture before the
-    // browser navigates away; PostHog uses keepalive/sendBeacon so the event
-    // still reaches the server.
     (function () {
-      var cta = document.getElementById('cta');
-      if (cta) {
-        cta.addEventListener('click', function () {
-          posthog.capture('cta_click', { destination: cta.href });
+      var hero = document.getElementById('cta-hero');
+      if (hero) {
+        hero.addEventListener('click', function () {
+          posthog.capture('cta_click', { destination: hero.href, location: 'hero' });
         });
       }
-    })();
-
-    // Video engagement + load instrumentation via the YouTube IFrame Player
-    // API. onReady tells us the player actually initialized and rendered, so
-    // we know the visitor saw a real, clickable video — not a blank/broken
-    // embed. Failures are reported affirmatively (see below) rather than as a
-    // silent absence of the "loaded" event.
-    (function () {
-      var tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      // If the API script itself can't load (blocked/offline), no player will
-      // ever be created — treat that as a load failure.
-      tag.onerror = function () { reportVideoLoadFailure('api_script_error'); };
-      document.head.appendChild(tag);
-    })();
-
-    var jomoPlayCaptured = false;
-    // Set once we know the outcome (loaded or failed) so we report it only once.
-    var jomoLoadResolved = false;
-
-    function isInViewport(el) {
-      if (!el) return false;
-      var r = el.getBoundingClientRect();
-      var vw = window.innerWidth || document.documentElement.clientWidth;
-      var vh = window.innerHeight || document.documentElement.clientHeight;
-      return r.width > 0 && r.height > 0 &&
-             r.bottom > 0 && r.right > 0 && r.top < vh && r.left < vw;
-    }
-
-    function reportVideoLoadFailure(reason) {
-      if (jomoLoadResolved) return;
-      jomoLoadResolved = true;
-      posthog.capture('video_load_failed', { reason: reason });
-    }
-
-    function onYouTubeIframeAPIReady() {
-      new YT.Player('jomo-video', {
-        events: {
-          onReady: function () {
-            if (!jomoLoadResolved) {
-              jomoLoadResolved = true;
-              // The player is initialized and displayed; record whether it was
-              // actually within the viewport at that moment.
-              posthog.capture('video_loaded', {
-                in_view: isInViewport(document.getElementById('jomo-video'))
-              });
-            }
-          },
-          onError: function (event) {
-            // Player exists but the video can't be shown (removed, embedding
-            // disabled, invalid id, etc.). Report distinctly from a blank load.
-            jomoLoadResolved = true;
-            posthog.capture('video_error', { code: event.data });
-          },
-          onStateChange: function (event) {
-            if (event.data === YT.PlayerState.PLAYING && !jomoPlayCaptured) {
-              jomoPlayCaptured = true;
-              posthog.capture('video_play');
-            } else if (event.data === YT.PlayerState.ENDED) {
-              posthog.capture('video_complete');
-            }
-          }
-        }
+      document.querySelectorAll('.plan-cta').forEach(function (el) {
+        el.addEventListener('click', function () {
+          posthog.capture('pricing_cta_click', {
+            plan: el.getAttribute('data-plan'),
+            price: el.getAttribute('data-price') || null,
+            destination: el.href
+          });
+        });
       });
-    }
-
-    // Watchdog: if the player hasn't become ready shortly after load (API
-    // blocked, network issue, silent blank embed), report the failure so the
-    // "visitor saw a blank spot" case is visible in analytics.
-    window.addEventListener('load', function () {
-      setTimeout(function () { reportVideoLoadFailure('timeout'); }, 8000);
-    });
+    })();
   </script>
 </body>
 </html>
