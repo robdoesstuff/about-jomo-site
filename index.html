@@ -547,7 +547,7 @@
     </section>
 
     <footer class="site-footer">
-      <p>Questions? Email <a href="mailto:info@horoco.co">info@horoco.co</a></p>
+      <p>Questions? Email <a id="contact-email" href="mailto:info@horoco.co">info@horoco.co</a></p>
     </footer>
   </section>
 
@@ -569,6 +569,13 @@
           });
         });
       });
+
+      var contact = document.getElementById('contact-email');
+      if (contact) {
+        contact.addEventListener('click', function () {
+          posthog.capture('contact_click', { destination: contact.href, location: 'footer' });
+        });
+      }
     })();
   </script>
 </body>
